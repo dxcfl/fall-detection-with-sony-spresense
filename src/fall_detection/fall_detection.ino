@@ -15,6 +15,9 @@
 // include application settings
 #include "app_settings.h"
 
+// miscellaneous
+#define STRING_BUFFER_SIZE 128
+
 /* Setup
  */
 void setup(void)
@@ -27,6 +30,9 @@ void setup(void)
 
   accelerometer_and_gyroscope_setup();
   lte_web_client_setup();
+#ifdef APP_USE_GNSS
+  gnss_setup();
+#endif
 }
 
 /* Loop
@@ -40,10 +46,26 @@ void loop()
   read_acceleration_and_rotation(&accX, &accY, &accZ, &gyrX, &gyrY, &gyrZ);
   fall_detected = fall_detection(accX, accY, accZ, gyrX, gyrY, gyrZ);
 
+#ifdef APP_USE_GNSS
+  double latitude;
+  double longitude;
+  double altitude;
+
+  gnss_update(&latitude, &longitude, &altitude);
+#endif
+
   if (fall_detected)
   {
     DEBUG_SERIAL_PRINTLN("INFO: FALL DETECTED!!!");
-    send_request();
+
+#ifdef APP_USE_GNSS
+    char message[STRING_BUFFER_SIZE];
+    sprintf(message, "Fall detected at Lat %0.6lf, Lon %0.6lf", latitude, longitude);
+#else
+    const char message[] = "Fall detected!";
+#endif
+    send_request(message);
+
 #ifdef DEBUG
     DEBUG_SERIAL_PRINTLN("WARNING: Pausing execution for 10 seconds ...");
     delay(10000);

@@ -23,15 +23,22 @@
 #define APP_FD_IMPACT_ACCELERATION_THRESHOLD 20 // m/s^2
 #define APP_FD_ORIENTATION_CHANGE_THRESHOLD 5 // rad/s
 
-/* Messaging parameters **************************************************
+/* Messaging parameters *******************************************************
 */
  #define APP_SEND_MESSAGE_HOST "api.callmebot.com" 
  #define APP_SEND_MESSAGE_PORT 443
- #define APP_SEND_MESSAGE_PATH "/signal/send.php?phone=+491631737743&apikey=123456&text=Alert%3A%20Fall%20detected%21"
+ #define APP_SEND_MESSAGE_PATH "/signal/send.php?phone=+491631737743&apikey=123456&text="
  #define APP_ROOTCA_FILE "isrg_root_x1_dst_root_ca_x3_.cer"
  
 /* LTE web client settings ****************************************************
 */
+
+/* Settings for GNSS positioning **********************************************
+*/
+
+#define APP_USE_GNSS 1
+
+#define APP_GNSS_POSITION_UPDATE_CYCLE 3000 // ms 
 
 // APN name
 #define APP_LTE_APN "iot.truphone.com" // replace your APN
@@ -60,5 +67,8 @@
 
 #define APP_LTE_RAT (LTE_NET_RAT_CATM) // RAT : LTE-M (LTE Cat-M1)
 // #define APP_LTE_RAT (LTE_NET_RAT_NBIOT) // RAT : NB-IoT
+
+
+
 
 #endif

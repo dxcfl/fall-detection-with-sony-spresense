@@ -148,8 +148,12 @@ void lte_web_client_setup()
 
 /* Send HTTP(S) GET request
  */
-void send_request()
+void send_request(const char *message)
 {
+  char buffer[STRING_BUFFER_SIZE]="\0";
+  strcat(buffer,getPath);
+  strcat(buffer,URLEncoder.encode(message).c_str());
+  
   // Set certifications via a file on the SD card before connecting to the server
   DEBUG_SERIAL_PRINTLN("INFO: Reading root CA ...");
   File rootCertsFile = theSD.open(APP_ROOTCA_FILE, FILE_READ);
@@ -164,8 +168,8 @@ void send_request()
 
   // HTTP GET method
   DEBUG_SERIAL_PRINT("INFO: Sending HTTP GET request for ");
-  DEBUG_SERIAL_PRINTLN(getPath);
-  client.get(getPath);
+  DEBUG_SERIAL_PRINTLN(buffer);
+  client.get(buffer);
 
   // read the status code and body of the response
   int statusCode = client.responseStatusCode();
